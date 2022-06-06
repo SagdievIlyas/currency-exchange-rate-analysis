@@ -6,6 +6,7 @@ import com.sagdievilyas.alfabank.currencyexchange.dto.giphy.Meta;
 import feign.FeignException;
 import org.jeasy.random.EasyRandom;
 import org.jeasy.random.EasyRandomParameters;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ class GiphyServiceTest {
 
     @Test
     public void getGifSuccessTest() {
-        System.out.println("\n\t\t GET GIF SUCCESS TEST");
+
         EasyRandomParameters parameters = new EasyRandomParameters();
         parameters.stringLengthRange(3, 3);
         EasyRandom generator = new EasyRandom(parameters);

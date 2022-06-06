@@ -26,7 +26,7 @@ public class ExchangeRateAnalysisController {
             String resultGifUrl = exchangeRateAnalysisService.analyzeExchangeRate(request);
             return ResponseEntity.ok(new ExchangeRateAnalysisResponse(resultGifUrl));
         } catch (BadRequestException e) {
-            return ResponseEntity.badRequest().body(new BadResponse(e.getMessage()));
+            return ResponseEntity.badRequest().body(new BadResponse("Invalid currency code"));
         } catch (OpenExchangeRateException e) {
             return ResponseEntity.internalServerError().body(new BadResponse("Rate service is not available"));
         }

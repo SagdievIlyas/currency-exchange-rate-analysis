@@ -1,6 +1,7 @@
 package com.sagdievilyas.alfabank.currencyexchange.service.openExchangeRate;
 
 import com.sagdievilyas.alfabank.currencyexchange.dto.openExchangeRate.CurrencyExchangeRate;
+import com.sagdievilyas.alfabank.currencyexchange.exception.BadRequestException;
 import com.sagdievilyas.alfabank.currencyexchange.exception.OpenExchangeRateException;
 import feign.FeignException;
 import org.junit.jupiter.api.Test;
@@ -42,11 +43,12 @@ class OpenExchangeRateServiceTest {
         Mockito.when(openExchangeRateClient.getExchangeRate(any(), any())).thenReturn(successRate);
 
         assertEquals(exchangeRate, openExchangeRateService.getExchangeRate(currencyCode, LocalDate.now()));
+        assertThrows(BadRequestException.class, () -> openExchangeRateService.getExchangeRate("Code", LocalDate.now()));
     }
 
     @Test
     public void getExchangeRateOpenExchangeRateExceptionTest() {
-        System.out.println("\n\n\t\t FEIGN EXCEPTION TEST");
+
         Mockito.when(openExchangeRateClient.getExchangeRate(any(), any())).thenThrow(FeignException.class);
 
         assertThrows(OpenExchangeRateException.class, () -> openExchangeRateService.getExchangeRate("Code", LocalDate.now()));

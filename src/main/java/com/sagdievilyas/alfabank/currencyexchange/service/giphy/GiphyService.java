@@ -57,6 +57,6 @@ public class GiphyService {
         if (response.getMeta().getResponse_id().isEmpty()) {
             throw new GiphyNotWorkingException("Giphy API has issues with GIPHY downstream systems.");
         }
-        return giphyClient.getGif(giphyApiKey, tag).getData().getUrl();
+        return response.getData().getUrl();
     }
 }
