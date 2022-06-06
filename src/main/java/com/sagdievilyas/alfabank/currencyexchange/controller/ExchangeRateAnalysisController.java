@@ -1,7 +1,9 @@
 package com.sagdievilyas.alfabank.currencyexchange.controller;
 
+import com.sagdievilyas.alfabank.currencyexchange.dto.exchangeRateAnalysis.BadResponse;
 import com.sagdievilyas.alfabank.currencyexchange.dto.exchangeRateAnalysis.ExchangeRateAnalysisRequest;
 import com.sagdievilyas.alfabank.currencyexchange.dto.exchangeRateAnalysis.ExchangeRateAnalysisResponse;
+import com.sagdievilyas.alfabank.currencyexchange.exception.BadRequestException;
 import com.sagdievilyas.alfabank.currencyexchange.service.exchangeRateAnalysis.ExchangeRateAnalysisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,11 @@ public class ExchangeRateAnalysisController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createAnalysis(ExchangeRateAnalysisRequest request) {
-        String resultGifUrl = exchangeRateAnalysisService.analyzeExchangeRate(request);
-        return ResponseEntity.ok( new ExchangeRateAnalysisResponse(resultGifUrl) );
+        try {
+            String resultGifUrl = exchangeRateAnalysisService.analyzeExchangeRate(request);
+            return ResponseEntity.ok(new ExchangeRateAnalysisResponse(resultGifUrl));
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body(new BadResponse(e.getMessage()));
+        }
     }
 }

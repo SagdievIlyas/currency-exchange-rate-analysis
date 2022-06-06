@@ -1,10 +1,10 @@
 package com.sagdievilyas.alfabank.currencyexchange.service.exchangeRateAnalysis;
 
 import com.sagdievilyas.alfabank.currencyexchange.dto.exchangeRateAnalysis.ExchangeRateAnalysisRequest;
+import com.sagdievilyas.alfabank.currencyexchange.exception.BadRequestException;
 import com.sagdievilyas.alfabank.currencyexchange.service.giphy.GiphyService;
 import com.sagdievilyas.alfabank.currencyexchange.service.openExchangeRate.OpenExchangeRateService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -17,25 +17,20 @@ import java.time.ZonedDateTime;
 
 @Service
 public class ExchangeRateAnalysisService {
-    private LocalDate todayUTC = ZonedDateTime.now(ZoneOffset.UTC).toLocalDate();
-    private LocalDate yesterdayUTC = todayUTC.minusDays(1);
-
-    @Value("${giphy.tag.increaseTag}")
-    private String increaseTag;
-
-    @Value("${giphy.tag.decreaseTag}")
-    private String decreaseTag;
 
     private final OpenExchangeRateService openExchangeRateService;
     private final GiphyService giphyService;
 
-    public String analyzeExchangeRate(ExchangeRateAnalysisRequest request) {
+    public String analyzeExchangeRate(ExchangeRateAnalysisRequest request) throws BadRequestException {
+        LocalDate todayUTC = ZonedDateTime.now(ZoneOffset.UTC).toLocalDate();
+        LocalDate yesterdayUTC = todayUTC.minusDays(1);
+
         BigDecimal todayRate = openExchangeRateService.getExchangeRate(request.getCode(), todayUTC);
         BigDecimal yesterdayRate = openExchangeRateService.getExchangeRate(request.getCode(), yesterdayUTC);
 
         if (todayRate.compareTo(yesterdayRate) >= 0) {
-            return giphyService.getGifByTag(increaseTag);
+            return giphyService.getIncreaseGif();
         }
-        else {return giphyService.getGifByTag(decreaseTag); }
+        else { return giphyService.getDecreaseGif(); }
     }
 }

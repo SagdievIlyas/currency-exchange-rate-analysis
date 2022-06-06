@@ -2,6 +2,7 @@ package com.sagdievilyas.alfabank.currencyexchange.service.openExchangeRate;
 
 import com.sagdievilyas.alfabank.currencyexchange.dto.openExchangeRate.CurrencyExchangeRate;
 import com.sagdievilyas.alfabank.currencyexchange.exception.BadRequestException;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,14 +20,15 @@ public class OpenExchangeRateService {
 
     private final OpenExchangeRateClient openExchangeRateClient;
 
-    public BigDecimal getExchangeRate(String code, LocalDate date) {
+    public BigDecimal getExchangeRate(String code, LocalDate date) throws BadRequestException {
+
         CurrencyExchangeRate exchangeRateResponse = openExchangeRateClient.getExchangeRate(date.toString(), openExchangeRateAppId);
+
         if (exchangeRateResponse.getRates().containsKey(code)) {
             return exchangeRateResponse.getRates().get(code);
         }
         else {
             throw new BadRequestException(String.format("The code: %s does not exist", code));
         }
-
     }
 }
