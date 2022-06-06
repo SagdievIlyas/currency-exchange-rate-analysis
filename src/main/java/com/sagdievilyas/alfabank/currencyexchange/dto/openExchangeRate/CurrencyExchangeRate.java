@@ -1,5 +1,6 @@
 package com.sagdievilyas.alfabank.currencyexchange.dto.openExchangeRate;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,7 @@ import java.util.HashMap;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class CurrencyExchangeRate {
     private String disclaimer;
     private String license;

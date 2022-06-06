@@ -4,6 +4,7 @@ import com.sagdievilyas.alfabank.currencyexchange.dto.exchangeRateAnalysis.BadRe
 import com.sagdievilyas.alfabank.currencyexchange.dto.exchangeRateAnalysis.ExchangeRateAnalysisRequest;
 import com.sagdievilyas.alfabank.currencyexchange.dto.exchangeRateAnalysis.ExchangeRateAnalysisResponse;
 import com.sagdievilyas.alfabank.currencyexchange.exception.BadRequestException;
+import com.sagdievilyas.alfabank.currencyexchange.exception.OpenExchangeRateException;
 import com.sagdievilyas.alfabank.currencyexchange.service.exchangeRateAnalysis.ExchangeRateAnalysisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,8 @@ public class ExchangeRateAnalysisController {
             return ResponseEntity.ok(new ExchangeRateAnalysisResponse(resultGifUrl));
         } catch (BadRequestException e) {
             return ResponseEntity.badRequest().body(new BadResponse(e.getMessage()));
+        } catch (OpenExchangeRateException e) {
+            return ResponseEntity.internalServerError().body(new BadResponse("Rate service is not available"));
         }
     }
 }

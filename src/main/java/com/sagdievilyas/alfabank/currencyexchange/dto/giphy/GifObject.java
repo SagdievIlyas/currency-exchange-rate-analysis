@@ -2,9 +2,11 @@ package com.sagdievilyas.alfabank.currencyexchange.dto.giphy;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
+@SuperBuilder
 public class GifObject {
     private String type;
     private String id;

@@ -2,6 +2,7 @@ package com.sagdievilyas.alfabank.currencyexchange.service.exchangeRateAnalysis;
 
 import com.sagdievilyas.alfabank.currencyexchange.dto.exchangeRateAnalysis.ExchangeRateAnalysisRequest;
 import com.sagdievilyas.alfabank.currencyexchange.exception.BadRequestException;
+import com.sagdievilyas.alfabank.currencyexchange.exception.OpenExchangeRateException;
 import com.sagdievilyas.alfabank.currencyexchange.service.giphy.GiphyService;
 import com.sagdievilyas.alfabank.currencyexchange.service.openExchangeRate.OpenExchangeRateService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class ExchangeRateAnalysisService {
     private final OpenExchangeRateService openExchangeRateService;
     private final GiphyService giphyService;
 
-    public String analyzeExchangeRate(ExchangeRateAnalysisRequest request) throws BadRequestException {
+    public String analyzeExchangeRate(ExchangeRateAnalysisRequest request) throws BadRequestException, OpenExchangeRateException {
         LocalDate todayUTC = ZonedDateTime.now(ZoneOffset.UTC).toLocalDate();
         LocalDate yesterdayUTC = todayUTC.minusDays(1);
 
