@@ -2,9 +2,7 @@ package com.sagdievilyas.alfabank.currencyexchange.service.giphy;
 
 import com.sagdievilyas.alfabank.currencyexchange.dto.giphy.GifObject;
 import com.sagdievilyas.alfabank.currencyexchange.dto.giphy.GiphyResponse;
-import com.sagdievilyas.alfabank.currencyexchange.exception.GiphyNotWorkingException;
 import feign.FeignException;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@Getter
 @Slf4j
 
 @Service

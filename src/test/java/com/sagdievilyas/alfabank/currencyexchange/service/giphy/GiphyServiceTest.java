@@ -6,10 +6,10 @@ import com.sagdievilyas.alfabank.currencyexchange.dto.giphy.Meta;
 import feign.FeignException;
 import org.jeasy.random.EasyRandom;
 import org.jeasy.random.EasyRandomParameters;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -18,6 +18,12 @@ import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 class GiphyServiceTest {
+
+    @Value("giphy.default.url.increaseGifUrl")
+    private String defaultIncreaseGifUrl;
+
+    @Value("giphy.default.url.decreaseGifUrl")
+    private String defaultDecreaseGifUrl;
 
     @Autowired
     GiphyService giphyService;
@@ -44,8 +50,8 @@ class GiphyServiceTest {
     public void getGifFeignExceptionTest() {
         Mockito.when(giphyClient.getGif(any(), any())).thenThrow(FeignException.class);
 
-        assertEquals(giphyService.getDefaultDecreaseGifUrl(), giphyService.getDecreaseGif());
-        assertEquals(giphyService.getDefaultIncreaseGifUrl(), giphyService.getIncreaseGif());
+        assertEquals(defaultDecreaseGifUrl, giphyService.getDecreaseGif());
+        assertEquals(defaultIncreaseGifUrl, giphyService.getIncreaseGif());
     }
 
     @Test
@@ -59,7 +65,7 @@ class GiphyServiceTest {
 
         Mockito.when(giphyClient.getGif(any(), any())).thenReturn(successResponse);
 
-        assertEquals(giphyService.getDefaultDecreaseGifUrl(), giphyService.getDecreaseGif());
-        assertEquals(giphyService.getDefaultIncreaseGifUrl(), giphyService.getIncreaseGif());
+        assertEquals(defaultDecreaseGifUrl, giphyService.getDecreaseGif());
+        assertEquals(defaultIncreaseGifUrl, giphyService.getIncreaseGif());
     }
 }

@@ -5,6 +5,7 @@ import com.sagdievilyas.alfabank.currencyexchange.exception.BadRequestException;
 import com.sagdievilyas.alfabank.currencyexchange.exception.OpenExchangeRateException;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @RequiredArgsConstructor
+@Slf4j
 
 @Service
 public class OpenExchangeRateService {
@@ -29,12 +31,12 @@ public class OpenExchangeRateService {
                 return exchangeRateResponse.getRates().get(code);
             }
             else {
+                log.error(String.format("The code: %s does not exist", code));
                 throw new BadRequestException(String.format("The code: %s does not exist", code));
             }
         } catch (FeignException e) {
+            log.error(e.getMessage());
             throw new OpenExchangeRateException(e.getMessage());
         }
-
-
     }
 }
