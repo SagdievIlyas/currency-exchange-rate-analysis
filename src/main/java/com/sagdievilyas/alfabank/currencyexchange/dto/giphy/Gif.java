@@ -1,5 +1,6 @@
 package com.sagdievilyas.alfabank.currencyexchange.dto.giphy;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,12 +8,22 @@ import lombok.Setter;
 @Setter
 public class Gif {
     private String url;
+
     private String width;
+
     private String height;
+
     private String size;
+
     private String mp4;
-    private String mp4_size;
+
+    @JsonProperty("mp4_size")
+    private String mp4Size;
+
     private String webp;
-    private String webp_size;
+
+    @JsonProperty("webp_size")
+    private String webpSize;
+
     private String frames;
 }

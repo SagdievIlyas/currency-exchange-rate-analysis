@@ -5,11 +5,13 @@ import com.sagdievilyas.alfabank.currencyexchange.exception.GiphyNotWorkingExcep
 import feign.FeignException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Getter
+@Slf4j
 
 @Service
 public class GiphyService {
@@ -35,8 +37,10 @@ public class GiphyService {
          try {
              return getGifByTag(increaseTag);
          } catch (GiphyNotWorkingException e) {
+             log.error(e.getMessage());
              return defaultIncreaseGifUrl;
          } catch (FeignException e) {
+             log.error(e.getMessage());
              return defaultIncreaseGifUrl;
          }
     }
@@ -45,16 +49,18 @@ public class GiphyService {
         try {
             return getGifByTag(decreaseTag);
         } catch (GiphyNotWorkingException e) {
+            log.error(e.getMessage());
             return defaultDecreaseGifUrl;
         } catch (FeignException e) {
+            log.error(e.getMessage());
             return defaultDecreaseGifUrl;
         }
     }
 
-    private String getGifByTag(String tag) throws GiphyNotWorkingException {
+    private String getGifByTag(String tag) {
         GiphyResponse response = giphyClient.getGif(giphyApiKey, tag);
 
-        if (response.getMeta().getResponse_id().isEmpty()) {
+        if (response.getMeta().getResponseId().isEmpty()) {
             throw new GiphyNotWorkingException("Giphy API has issues with GIPHY downstream systems.");
         }
         return response.getData().getUrl();

@@ -21,7 +21,7 @@ public class OpenExchangeRateService {
 
     private final OpenExchangeRateClient openExchangeRateClient;
 
-    public BigDecimal getExchangeRate(String code, LocalDate date) throws BadRequestException, OpenExchangeRateException {
+    public BigDecimal getExchangeRate(String code, LocalDate date) {
         try {
             CurrencyExchangeRate exchangeRateResponse = openExchangeRateClient.getExchangeRate(date.toString(), openExchangeRateAppId);
 

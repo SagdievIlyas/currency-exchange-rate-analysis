@@ -22,7 +22,7 @@ public class ExchangeRateAnalysisService {
     private final OpenExchangeRateService openExchangeRateService;
     private final GiphyService giphyService;
 
-    public String analyzeExchangeRate(ExchangeRateAnalysisRequest request) throws BadRequestException, OpenExchangeRateException {
+    public String analyzeExchangeRate(ExchangeRateAnalysisRequest request) {
         LocalDate todayUTC = ZonedDateTime.now(ZoneOffset.UTC).toLocalDate();
         LocalDate yesterdayUTC = todayUTC.minusDays(1);
 

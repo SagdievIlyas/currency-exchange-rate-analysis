@@ -1,5 +1,6 @@
 package com.sagdievilyas.alfabank.currencyexchange.dto.giphy;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,5 +11,6 @@ import lombok.Setter;
 public class Meta {
     private String msg;
     private int status;
-    private String response_id;
+    @JsonProperty("response_id")
+    private String responseId;
 }
