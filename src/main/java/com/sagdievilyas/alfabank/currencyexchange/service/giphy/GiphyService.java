@@ -1,5 +1,6 @@
 package com.sagdievilyas.alfabank.currencyexchange.service.giphy;
 
+import com.sagdievilyas.alfabank.currencyexchange.dto.giphy.GifObject;
 import com.sagdievilyas.alfabank.currencyexchange.dto.giphy.GiphyResponse;
 import com.sagdievilyas.alfabank.currencyexchange.exception.GiphyNotWorkingException;
 import feign.FeignException;
@@ -8,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Getter
@@ -34,35 +37,29 @@ public class GiphyService {
     private final GiphyClient giphyClient;
 
     public String getIncreaseGif() {
-         try {
-             return getGifByTag(increaseTag);
-         } catch (GiphyNotWorkingException e) {
-             log.error(e.getMessage());
-             return defaultIncreaseGifUrl;
-         } catch (FeignException e) {
-             log.error(e.getMessage());
-             return defaultIncreaseGifUrl;
-         }
+        return getGifByTag(increaseTag).orElseGet(() -> defaultIncreaseGifUrl);
     }
 
     public String getDecreaseGif() {
-        try {
-            return getGifByTag(decreaseTag);
-        } catch (GiphyNotWorkingException e) {
-            log.error(e.getMessage());
-            return defaultDecreaseGifUrl;
-        } catch (FeignException e) {
-            log.error(e.getMessage());
-            return defaultDecreaseGifUrl;
-        }
+        return getGifByTag(decreaseTag).orElseGet(() -> defaultDecreaseGifUrl);
     }
 
-    private String getGifByTag(String tag) {
-        GiphyResponse response = giphyClient.getGif(giphyApiKey, tag);
+    private Optional<String> getGifByTag(String tag) {
+        try{
+            GiphyResponse response = giphyClient.getGif(giphyApiKey, tag);
 
-        if (response.getMeta().getResponseId().isEmpty()) {
-            throw new GiphyNotWorkingException("Giphy API has issues with GIPHY downstream systems.");
+            if (response.getMeta().getResponseId().isEmpty()) {
+                log.error("Giphy returns empty response_id");
+                return Optional.empty();
+            }
+
+            return Optional.ofNullable(response)
+                    .map(GiphyResponse::getData)
+                    .map((GifObject::getUrl));
+
+        } catch (FeignException e) {
+            log.error(e.getMessage());
+            return Optional.empty();
         }
-        return response.getData().getUrl();
     }
 }
